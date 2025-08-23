@@ -1,20 +1,21 @@
 @echo off
-title DOTA 2 UPDATER - ESPORTS STEAM TOOLS
+title SAFE CS:GO UPDATER - ESPORTS STEAM TOOLS
 REM chcp 65001 > nul
 setlocal enabledelayedexpansion
 
-echo [DEBUG] Starting Dota 2 updater...
-timeout /t 1 /nobreak > nul
-
 echo.
 echo ====================================================================
-echo |                     DOTA 2 UPDATER v3.0                         |
-echo |                    ESPORTS STEAM TOOLS                          |
+echo ^|                      CS:GO UPDATER v3.0                         ^|
+echo ^|                    ESPORTS STEAM TOOLS                          ^|
 echo ====================================================================
 echo.
 echo [DEBUG] Script started successfully
 echo [DEBUG] Current directory: %CD%
 echo [DEBUG] Script location: %~dp0
+
+REM Always add pause at the very beginning for testing
+echo [DEBUG] Testing pause functionality...
+timeout /t 2 /nobreak > nul
 
 REM Check for config file
 echo [DEBUG] Checking for config file: %~dp0..\config\.env
@@ -36,14 +37,18 @@ echo [DEBUG] Configuration file found
 echo [DEBUG] Loading configuration...
 
 REM Load environment variables
+echo [DEBUG] Loading environment variables from file...
 for /f "usebackq eol=# tokens=1,2 delims==" %%A in ("%~dp0..\config\.env") do (
     if "%%A" neq "" if "%%B" neq "" (
+        echo [DEBUG] Loading: %%A
         set %%A=%%B
     )
 )
 
+echo [DEBUG] Checking if ACCOUNT1_LOGIN is loaded...
 if "%ACCOUNT1_LOGIN%"=="" (
-    echo [ERROR] ERROR: Configuration is empty or invalid!
+    echo [ERROR] Configuration is empty or invalid!
+    echo [DEBUG] ACCOUNT1_LOGIN is empty
     echo Please check your config\.env file.
     echo Press any key to exit...
     pause > nul
@@ -51,10 +56,16 @@ if "%ACCOUNT1_LOGIN%"=="" (
 )
 
 echo [SUCCESS] Configuration loaded successfully
+echo [DEBUG] ACCOUNT1_LOGIN loaded: %ACCOUNT1_LOGIN%
 echo.
 
+echo This is a SAFE TEST version - it will NOT actually run Steam
+echo Press any key to see what would happen...
+pause
+
+echo.
 echo ====================================================================
-echo |                        SELECT ACCOUNT                           |
+echo ^|                        SELECT ACCOUNT                           ^|
 echo ====================================================================
 echo.
 echo    1. [USER] Account #1 (%ACCOUNT1_LOGIN%)
@@ -87,62 +98,25 @@ echo [SUCCESS] Selected account: %LOGIN%
 echo.
 
 echo ====================================================================
-echo |                     DOTA 2 UPDATE PROCESS                       |
+echo ^|                      CS:GO UPDATE PROCESS                       ^|
 echo ====================================================================
 
-echo [1/4] [UPDATE] Terminating Steam processes...
-taskkill /f /im steam.exe >nul 2>&1
-taskkill /f /im steamwebhelper.exe >nul 2>&1
-timeout /t 2 /nobreak >nul
-
-echo [2/4] [SEARCH] Locating Steam installation...
-set STEAM_EXE=""
-
-for /f "tokens=2*" %%a in ('reg query "HKCU\Software\Valve\Steam" /v "SteamExe" 2^>nul') do (
-    if exist "%%b" (
-        set STEAM_EXE="%%b"
-        echo       [SUCCESS] Found via registry: %%b
-        goto :steam_found
-    )
-)
-
-set PATHS[0]="C:\Program Files (x86)\Steam\Steam.exe"
-set PATHS[1]="C:\Program Files\Steam\Steam.exe"
-set PATHS[2]="D:\Steam\Steam.exe"
-
-for /L %%i in (0,1,2) do (
-    call set CURRENT=%%PATHS[%%i]%%
-    if exist !CURRENT! (
-        set STEAM_EXE=!CURRENT!
-        echo       [SUCCESS] Found: !CURRENT!
-        goto :steam_found
-    )
-)
-
-echo       [ERROR] ERROR: Steam installation not found!
-echo Press any key to exit...
-pause > nul
-exit /b 1
-
-:steam_found
-echo [3/4] 🚀 Launching Steam with authentication...
-start "" %STEAM_EXE% -login %LOGIN% %PASSWORD% -silent
-
-echo [4/4] [DOTA2]  Initiating Dota 2 update...
-timeout /t 5 /nobreak >nul
-start "" steam://validate/570
+echo [TEST MODE] This would normally:
+echo [1/4] [UPDATE] Terminate Steam processes...
+echo [2/4] [SEARCH] Locate Steam installation...
+echo [3/4] Launch Steam with authentication...
+echo [4/4] [CS:GO] Initiate CS:GO update...
 
 echo.
 echo ====================================================================
-echo |                    DOTA 2 UPDATE INITIATED                      |
+echo ^|                     TEST COMPLETED SUCCESSFULLY                 ^|
 echo ====================================================================
 echo.
-echo [GAME] Game: Dota 2
+echo [GAME] Game: Counter-Strike: Global Offensive
 echo [USER] Account: %LOGIN%
-echo [UPDATE] Steam will automatically download updates
-echo [NOTE] Game will NOT launch after update
+echo [TEST] This was a SAFE TEST - no actual changes made
 echo.
 echo ====================================================================
-echo |                    PRESS ANY KEY TO EXIT                        |
+echo ^|                    PRESS ANY KEY TO EXIT                        ^|
 echo ====================================================================
 pause > nul

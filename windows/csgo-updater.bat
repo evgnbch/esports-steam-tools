@@ -1,7 +1,10 @@
 @echo off
 title CS:GO UPDATER - ESPORTS STEAM TOOLS
-chcp 65001 > nul
+REM chcp 65001 > nul
 setlocal enabledelayedexpansion
+
+echo [DEBUG] Starting CS:GO updater...
+timeout /t 1 /nobreak > nul
 
 echo.
 echo ====================================================================

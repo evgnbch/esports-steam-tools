@@ -1,15 +1,19 @@
 @echo off
 title ESPORTS STEAM TOOLS - UNIVERSAL
-chcp 65001 > nul
+REM chcp 65001 > nul
 setlocal enabledelayedexpansion
+
+echo [DEBUG] Starting script...
+timeout /t 1 /nobreak > nul
 
 echo.
 echo ====================================================================
-echo |                        ESPORTS STEAM TOOLS                      |
-echo |                   SECURE STEAM AUTOMATION v3.0                  |
-echo |                   Built for Professional Esports Teams          |
+echo ^|                        ESPORTS STEAM TOOLS                      ^|
+echo ^|                   SECURE STEAM AUTOMATION v3.0                  ^|
+echo ^|                   Built for Professional Esports Teams          ^|
 echo ====================================================================
 echo.
+echo [DEBUG] Script initialization completed successfully
 
 REM Check for config file
 echo [DEBUG] Checking for config file: %~dp0..\config\.env
