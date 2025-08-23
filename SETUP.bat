@@ -56,11 +56,11 @@ echo
 read -p "Open config/.env file now? (Y/N): " OPEN_CONFIG
 if [[ "$OPEN_CONFIG" =~ ^[Yy]$ ]]; then
     if command -v code >/dev/null 2>&1; then
-        code "config/.env"
+        code "config/.env" &
     elif command -v nano >/dev/null 2>&1; then
-        nano "config/.env"
+        nano "config/.env" &
     elif command -v vim >/dev/null 2>&1; then
-        vim "config/.env"
+        vim "config/.env" &
     else
         echo "Please open config/.env manually in your preferred editor"
     fi
