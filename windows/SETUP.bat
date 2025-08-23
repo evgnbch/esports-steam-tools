@@ -42,11 +42,11 @@ echo.
 echo [3/3] 🎯 Ready to use!
 echo.
 echo Available tools:
-echo   📁 scripts\csgo-updater.bat   - 🔫 CS:GO updates only
-echo   📁 scripts\dota2-updater.bat  - ⚔️  Dota 2 updates only
-echo   📁 scripts\steam-tools.bat    - 🎮 Universal tool (both games)
+echo   📁 windows\csgo-updater.bat   - 🔫 CS:GO updates only
+echo   📁 windows\dota2-updater.bat  - ⚔️  Dota 2 updates only
+echo   📁 windows\steam-tools.bat    - 🎮 Universal tool (both games)
 echo.
-echo   📁 test-setup\TEST-SETUP.bat  - 🧪 Safe testing environment
+echo   📁 tests\windows\TEST-SETUP.bat  - 🧪 Safe testing environment
 echo.
 
 echo ╔══════════════════════════════════════════════════════════════════╗
@@ -63,7 +63,7 @@ echo ✅ Setup completed successfully!
 echo.
 echo Next steps:
 echo   1. Edit config\.env with your credentials
-echo   2. Run test-setup\TEST-SETUP.bat to verify everything works
+echo   2. Run tests\windows\TEST-SETUP.bat to verify everything works
 echo   3. Use the main scripts for your esports team
 echo.
 echo ╔══════════════════════════════════════════════════════════════════╗
