@@ -144,22 +144,6 @@ ACCOUNT4_PASSWORD=your_steam_password_4
 
 ---
 
-## 🧪 Testing
-
-### Windows
-```batch
-cd tests\windows
-TEST-SETUP.bat
-```
-
-### What Gets Tested?
-- ✅ System compatibility
-- ✅ Steam installation detection
-- ✅ Configuration validation
-- ✅ Script permissions
-- ✅ Steam protocol support
-
----
 
 ## 🔧 Troubleshooting
 
