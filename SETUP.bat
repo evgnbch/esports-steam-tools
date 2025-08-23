@@ -10,7 +10,7 @@ echo ================================================================
 echo.
 
 REM Determine script directory and navigate to project root
-cd /d "%~dp0.."
+cd /d "%~dp0"
 
 echo [DEBUG] Current directory: %CD%
 echo [DEBUG] Script location: %~dp0
@@ -19,6 +19,13 @@ echo Setting up secure Steam automation tools for Windows...
 echo.
 
 echo [1/3] Creating configuration file...
+echo [DEBUG] Current working directory: %CD%
+echo [DEBUG] Looking for config directory...
+if not exist "config\" (
+    echo [ERROR] Config directory not found!
+    echo [DEBUG] Creating config directory...
+    mkdir config
+)
 echo [DEBUG] Checking if config\.env exists...
 if exist "config\.env" (
     echo WARNING: Configuration file already exists!
