@@ -7,10 +7,6 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-orange.svg?style=for-the-badge)](https://github.com/evgnbch/esports-steam-tools)
 [![Steam](https://img.shields.io/badge/Steam-Compatible-blue.svg?style=for-the-badge)](https://store.steampowered.com/)
 
-**🔐 Professional & Secure Steam automation tools for esports teams**  
-
-[📥 Download](#) • [️ Security](#security) • [🐛 Issues](../../issues)
-
 </div>
 
 ---
