@@ -1,0 +1,47 @@
+# Sensitive files
+.env
+.env.local
+.env.production
+*.env
+
+# Credentials and passwords
+config/credentials.txt
+passwords.txt
+accounts.txt
+
+# Logs
+*.log
+logs/
+debug.log
+error.log
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Windows specific
+Thumbs.db
+desktop.ini
+*.lnk
+
+# IDE files
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Build artifacts
+build/
+dist/
+release/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# System files
+.DS_Store
+*.pid
