@@ -1,7 +1,3 @@
-<div align="center">
-  <img src="assets/images/banner.svg" alt="Esports Steam Tools Banner" width="100%"/>
-</div>
-
 # ⚡ Esports Steam Tools
 
 <div align="center">
