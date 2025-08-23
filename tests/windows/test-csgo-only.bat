@@ -4,15 +4,15 @@ chcp 65001 > nul
 setlocal enabledelayedexpansion
 
 echo.
-echo ╔══════════════════════════════════════════════════════════════════╗
-echo ║                      CS:GO UPDATER TEST                         ║
-echo ║                        🧪 TEST MODE 🧪                          ║
-echo ╚══════════════════════════════════════════════════════════════════╝
+echo ====================================================================
+echo |                      CS:GO UPDATER TEST                         |
+echo |                        [TEST] TEST MODE [TEST]                          |
+echo ====================================================================
 echo.
 
 REM Load test configuration
 if not exist "config\.env" (
-    echo ❌ ERROR: Test configuration not found!
+    echo [ERROR] ERROR: Test configuration not found!
     echo Please run TEST-SETUP.bat first.
     pause > nul
     exit /b 1
@@ -24,17 +24,17 @@ for /f "usebackq eol=# tokens=1,2 delims==" %%A in ("config\.env") do (
     )
 )
 
-echo 🔫 Game: Counter-Strike: Global Offensive
+echo [CS:GO] Game: Counter-Strike: Global Offensive
 echo 🆔 App ID: 730
-echo 👤 Test Account: %ACCOUNT1_LOGIN%
+echo [USER] Test Account: %ACCOUNT1_LOGIN%
 echo.
 
-echo 🧪 TEST: CS:GO Update Process
+echo [TEST] TEST: CS:GO Update Process
 echo.
-echo ✅ Would terminate Steam processes
-echo ✅ Would detect Steam installation  
-echo ✅ Would login with: %ACCOUNT1_LOGIN%
-echo ✅ Would validate CS:GO files (App ID: 730)
+echo [SUCCESS] Would terminate Steam processes
+echo [SUCCESS] Would detect Steam installation  
+echo [SUCCESS] Would login with: %ACCOUNT1_LOGIN%
+echo [SUCCESS] Would validate CS:GO files (App ID: 730)
 echo.
 echo 🎉 CS:GO updater test PASSED!
 echo.

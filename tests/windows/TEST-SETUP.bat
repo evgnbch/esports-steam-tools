@@ -4,11 +4,11 @@ chcp 65001 > nul
 setlocal enabledelayedexpansion
 
 echo.
-echo ╔══════════════════════════════════════════════════════════════════╗
-echo ║                    ESPORTS STEAM TOOLS                          ║
-echo ║                      TEST ENVIRONMENT                           ║
-echo ║                        Version 3.0                              ║
-echo ╚══════════════════════════════════════════════════════════════════╝
+echo ====================================================================
+echo |                    ESPORTS STEAM TOOLS                          |
+echo |                      TEST ENVIRONMENT                           |
+echo |                        Version 3.0                              |
+echo ====================================================================
 echo.
 echo Setting up test environment for Windows...
 echo.
@@ -41,9 +41,9 @@ echo SUCCESS: Test variables configured
 echo.
 echo [4/4] Verification complete!
 echo.
-echo ╔══════════════════════════════════════════════════════════════════╗
-echo ║                        TEST READY                               ║
-echo ╚══════════════════════════════════════════════════════════════════╝
+echo ====================================================================
+echo |                        TEST READY                               |
+echo ====================================================================
 echo.
 echo Available test commands:
 echo.
@@ -51,7 +51,7 @@ echo    test-steam-tools.bat       - Run main tool with test config
 echo    test-csgo-only.bat         - Test CS:GO updater only  
 echo    test-dota2-only.bat        - Test Dota 2 updater only
 echo.
-echo ⚠️  IMPORTANT:
+echo [WARNING]  IMPORTANT:
 echo    - These are SAFE TEST SCRIPTS
 echo    - No real Steam accounts will be used
 echo    - Steam will NOT actually login
@@ -95,12 +95,12 @@ goto :end
 
 :view_config
 echo.
-echo ═══════════════════════════════════════════════════════════════
+echo ===============================================================
 echo                     TEST CONFIGURATION
-echo ═══════════════════════════════════════════════════════════════
+echo ===============================================================
 type "config\.env"
 echo.
-echo ═══════════════════════════════════════════════════════════════
+echo ===============================================================
 goto :end
 
 :exit
@@ -110,11 +110,11 @@ goto :end
 
 :end
 echo.
-echo ╔══════════════════════════════════════════════════════════════════╗
-echo ║                     TEST COMPLETED                              ║
-echo ║                                                                  ║
-echo ║   Console will stay open for review.                            ║
-echo ║   Press any key to close when ready.                            ║
-echo ╚══════════════════════════════════════════════════════════════════╝
+echo ====================================================================
+echo |                     TEST COMPLETED                              |
+echo |                                                                  |
+echo |   Console will stay open for review.                            |
+echo |   Press any key to close when ready.                            |
+echo ====================================================================
 echo.
 pause > nul

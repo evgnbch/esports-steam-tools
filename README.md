@@ -3,12 +3,7 @@
 <div align="center">
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
-[![Security](https://img.shields.io/badge/Security-Enhanced-br## 🎮 Supported Games
-
-| Game | Steam ID | Windows | macOS | Linux | Features |
-|------|----------|---------|-------|-------|----------|
-| 🔫 **CS:GO** | `730` | ✅ | ✅ | ✅ | Auto-update, Multi-account |
-| ⚔️ **Dota 2** | `570` | ✅ | ✅ | ✅ | Auto-update, Multi-account |een.svg?style=for-the-badge)](#)
+[![Security](https://img.shields.io/badge/Security-Enhanced-green.svg?style=for-the-badge)](#)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-orange.svg?style=for-the-badge)](https://github.com/evgnbch/esports-steam-tools)
 [![Steam](https://img.shields.io/badge/Steam-Compatible-blue.svg?style=for-the-badge)](https://store.steampowered.com/)
 
@@ -49,7 +44,7 @@
 ## ✨ Features
 
 ### 🔐 Security
-- ��️ Local `.env` configuration
+- 🔧 Local `.env` configuration
 - 🚫 Zero credentials in code
 - 🔒 `.gitignore` protection
 - ✅ Enterprise-grade security
@@ -206,7 +201,7 @@ ACCOUNT4_PASSWORD=your_steam_password_4
 
 ---
 
-## �� Supported Games
+## 🎮 Supported Games
 
 | Game | Steam ID | Status | Features |
 |------|----------|--------|----------|
@@ -272,6 +267,8 @@ chmod +x tests/macos-linux/*.sh
 - ⚙️ [Configuration](docs/CONFIG.md)
 - 🎮 [Gaming Setup](docs/GAMING.md)
 - 🔧 [Troubleshooting](docs/TROUBLESHOOTING.md)
+- 🖥️ [Windows Quick Start](docs/WINDOWS-QUICK-START.md)
+- 🖥️ [Windows Troubleshooting](docs/WINDOWS-TROUBLESHOOTING.md)
 
 ---
 
