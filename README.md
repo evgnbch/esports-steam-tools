@@ -185,7 +185,6 @@ ACCOUNT4_PASSWORD=your_steam_password_4
 │       ├── test-setup.sh  # System test
 │       └── csgo-updater-demo.sh # Demo mode
 ├── 📚 docs/               # Documentation
-├── 🎨 assets/             # Graphics & logos
 └── 🛡️ .gitignore          # Security protection
 ```
 
