@@ -9,33 +9,22 @@ echo                      Professional Edition v3.0
 echo ================================================================
 echo.
 
-REM Determine script directory and navigate to project root
 cd /d "%~dp0"
 
-echo [DEBUG] Current directory: %CD%
-echo [DEBUG] Script location: %~dp0
-
-echo Setting up secure Steam automation tools for Windows...
+echo Setting up Steam automation tools...
 echo.
 
 echo [1/3] Creating configuration file...
-echo [DEBUG] Current working directory: %CD%
-echo [DEBUG] Looking for config directory...
 if not exist "config\" (
-    echo [ERROR] Config directory not found!
-    echo [DEBUG] Creating config directory...
     mkdir config
 )
-echo [DEBUG] Checking if config\.env exists...
 if exist "config\.env" (
     echo WARNING: Configuration file already exists!
     set /p OVERWRITE="Do you want to overwrite it? (Y/N): "
     if /i "!OVERWRITE!"=="Y" (
-        echo [DEBUG] Copying config\.env.example to config\.env...
         copy "config\.env.example" "config\.env" > nul
         if errorlevel 1 (
             echo [ERROR] Failed to copy configuration file!
-            echo [DEBUG] Make sure config\.env.example exists
             pause > nul
             exit /b 1
         )
@@ -44,13 +33,10 @@ if exist "config\.env" (
         echo SKIP: Keeping existing configuration
     )
 ) else (
-    echo [DEBUG] Creating config directory if needed...
     if not exist "config\" mkdir config
-    echo [DEBUG] Copying config\.env.example to config\.env...
     copy "config\.env.example" "config\.env" > nul
     if errorlevel 1 (
         echo [ERROR] Failed to copy configuration file!
-        echo [DEBUG] Make sure config\.env.example exists
         pause > nul
         exit /b 1
     )
@@ -75,8 +61,6 @@ echo   windows\csgo-updater.bat   - CS:GO updates only
 echo   windows\dota2-updater.bat  - Dota 2 updates only  
 echo   windows\steam-tools.bat    - Universal tool (both games)
 echo.
-echo   tests\windows\TEST-SETUP.bat  - Safe testing environment
-echo.
 
 echo ================================================================
 echo                         SECURITY REMINDER                    
@@ -92,8 +76,8 @@ echo Setup completed successfully!
 echo.
 echo Next steps:
 echo   1. Edit config\.env with your credentials
-echo   2. Run tests\windows\TEST-SETUP.bat to verify everything works
-echo   3. Use the main scripts for your esports team
+echo   2. Run windows\steam-tools.bat and choose game/account
+echo   3. Use game-specific scripts when needed
 echo.
 echo ================================================================
 echo                    PRESS ANY KEY TO EXIT                        
