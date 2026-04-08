@@ -57,7 +57,7 @@ echo.
 echo [3/3] Ready to use!
 echo.
 echo Available tools:
-echo   windows\csgo-updater.bat   - CS:GO updates only
+echo   windows\csgo-updater.bat   - Counter-Strike 2 updates only
 echo   windows\dota2-updater.bat  - Dota 2 updates only  
 echo   windows\steam-tools.bat    - Universal tool (both games)
 echo.
@@ -67,7 +67,7 @@ echo                         SECURITY REMINDER
 echo                                                                  
 echo   1. Never commit .env files to Git                             
 echo   2. Use strong, unique passwords                               
-echo   3. Test with test-setup folder first                          
+echo   3. Test with one non-main account first                       
 echo   4. Keep your Steam Guard enabled                              
 echo ================================================================
 echo.

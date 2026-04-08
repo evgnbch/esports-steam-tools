@@ -1,0 +1,155 @@
+name: CI and Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ci-release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+permissions:
+  contents: read
+
+jobs:
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Validate project structure and security guards
+        run: bash scripts/ci/validate-project.sh
+
+  release-meta:
+    name: Create or update release
+    needs: quality-gate
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG=${{ github.ref_name }}
+          VERSION=${TAG#v}
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Validate manifest version
+        run: |
+          set -euo pipefail
+          VERSION=${{ steps.version.outputs.version }}
+          MANIFEST_VERSION="$(jq -r '.version' config/release-manifest.json)"
+
+          if [ "$VERSION" != "$MANIFEST_VERSION" ]; then
+            echo "[ERROR] Tag version and config/release-manifest.json mismatch"
+            echo "Tag version: $VERSION"
+            echo "Manifest version: $MANIFEST_VERSION"
+            exit 1
+          fi
+
+      - name: Extract changelog for this version
+        run: |
+          set -euo pipefail
+          VERSION=${{ steps.version.outputs.version }}
+
+          sed -n "/^## \[$VERSION\]/,/^## \[/p" CHANGELOG.md | head -n -1 | tail -n +2 > RELEASE_NOTES.md || true
+
+          if [ ! -s RELEASE_NOTES.md ]; then
+            echo "Release ${{ steps.version.outputs.tag }}" > RELEASE_NOTES.md
+            echo "" >> RELEASE_NOTES.md
+            echo "Automated release notes fallback." >> RELEASE_NOTES.md
+          fi
+
+          cat RELEASE_NOTES.md
+
+      - name: Create or update release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          set -euo pipefail
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --notes-file RELEASE_NOTES.md
+          else
+            gh release create "$TAG" --title "$TAG" --notes-file RELEASE_NOTES.md
+          fi
+
+          echo "[DONE] Release prepared for $TAG"
+
+  release-windows-archive:
+    name: Build and upload windows archive
+    needs: release-meta
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.release-meta.outputs.tag }}
+
+      - name: Build archive
+        id: archive
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Path dist -Force | Out-Null
+
+          $archive = "dist/esports-steam-tools-${{ needs.release-meta.outputs.version }}-windows.zip"
+          $files = @(
+            'README.md',
+            'SECURITY.md',
+            'CHANGELOG.md',
+            'LICENSE',
+            'SETUP.bat',
+            'config/.env.example',
+            'config/release-manifest.json',
+            'windows'
+          )
+
+          Compress-Archive -Path $files -DestinationPath $archive -Force
+          "archive=$archive" >> $env:GITHUB_OUTPUT
+
+      - name: Upload windows archive to release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.release-meta.outputs.tag }}
+          ARCHIVE: ${{ steps.archive.outputs.archive }}
+        run: |
+          $ErrorActionPreference = 'Continue'
+
+          for ($attempt = 1; $attempt -le 5; $attempt++) {
+            gh release upload $env:TAG $env:ARCHIVE --clobber
+
+            if ($LASTEXITCODE -eq 0) {
+              Write-Output "[DONE] Uploaded $env:ARCHIVE on attempt $attempt"
+              exit 0
+            }
+
+            Write-Output "[WARN] Upload attempt $attempt failed, retrying..."
+            Start-Sleep -Seconds ($attempt * 2)
+          }
+
+          Write-Error "[ERROR] Failed to upload windows archive after retries"
+          exit 1

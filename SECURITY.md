@@ -1,96 +1,62 @@
-# 🔐 Security Guidelines
+# Security Guidelines
 
-## ⚠️ Critical Security Notice
+## Critical Notice
 
-This repository was created as a **secure replacement** for a compromised project where Steam credentials were accidentally exposed in Git history. Follow these guidelines to maintain security.
+This repository automates Steam login/update flows. Treat all credentials as sensitive secrets.
 
-## 🛡️ Security Best Practices
+## Core Rules
 
-### 1. Configuration Security
-- **NEVER** commit `.env` files with real credentials
-- Always use `.env.example` as a template
-- Keep `.env` files local and secure
-- The `.gitignore` file protects `.env` automatically
+1. Never commit `config/.env` with real usernames/passwords.
+2. Use `config/.env.example` only as a template.
+3. Do not hardcode credentials in any `.bat` script.
+4. Keep Steam Guard enabled on all managed accounts.
 
-### 2. Password Management
-```bash
-# ✅ GOOD: Use .env files
+## Safe Configuration Pattern
+
+```env
+# Good
 ACCOUNT1_LOGIN=myusername
 ACCOUNT1_PASSWORD=mypassword
+```
 
-# ❌ BAD: Hardcoded in scripts
+```bat
+REM Bad: never hardcode credentials in scripts
 set LOGIN=myusername
 set PASSWORD=mypassword
 ```
 
-### 3. Git Repository Security
-- Check `.gitignore` includes sensitive files
-- Never commit configuration files with credentials
-- Use `git status` before committing
-- Review changes with `git diff` before pushing
+## Git Hygiene
 
-### 4. Steam Account Security
-- Enable Steam Guard on all accounts
-- Use strong, unique passwords
-- Regular password rotation (every 90 days)
-- Monitor account activity
+- Check `git status` before every commit.
+- Review staged changes with `git diff --cached`.
+- Ensure `.gitignore` still contains `.env` and `*.env` patterns.
 
-## 🚨 Emergency Response
+## Incident Response
 
-### If Credentials Are Exposed:
-1. **Immediately change all exposed passwords**
-2. **Delete the compromised repository**
-3. **Create new repository with clean history**
-4. **Notify team members**
-5. **Review access logs**
+If credentials were exposed:
 
-### Recovery Process:
-```bash
-# 1. Change Steam passwords immediately
-# 2. Delete old repository
-gh repo delete username/old-repo --confirm
+1. Change all exposed Steam passwords immediately.
+2. Rotate related credentials/tokens.
+3. Review recent commits and repository access.
+4. Re-clone into a clean workspace if needed.
 
-# 3. Create new secure repository
-git clone https://github.com/username/esports-steam-tools.git
+### Recovery Steps (Windows-friendly)
+
+```powershell
+git clone https://github.com/<owner>/esports-steam-tools.git
 cd esports-steam-tools
-
-# 4. Set up secure configuration
-cp config/.env.example config/.env
-# Edit config/.env with new passwords
+SETUP.bat
 ```
 
-## 🔍 Security Checklist
+Then edit `config/.env` locally with new credentials.
 
-### Before Each Commit:
-- [ ] Check no `.env` files in staging
-- [ ] Review `git status` output
-- [ ] Verify `.gitignore` is working
-- [ ] Run `git diff --cached` to review changes
+## Commit Checklist
 
-### Weekly Security Review:
-- [ ] Audit repository for sensitive data
-- [ ] Check team access permissions
-- [ ] Review recent commits
-- [ ] Update passwords if needed
+- [ ] No `.env` files are staged.
+- [ ] No passwords appear in diff output.
+- [ ] Only intended scripts/docs were changed.
 
-### Monthly Security Maintenance:
-- [ ] Rotate Steam account passwords
-- [ ] Review `.gitignore` effectiveness
-- [ ] Update security documentation
-- [ ] Train team on security practices
-
-## 📚 Security Resources
+## Resources
 
 - [Steam Security FAQ](https://help.steampowered.com/en/faqs/view/6639-C5EC-80A5-00B1)
-- [Git Security Best Practices](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work)
-- [Environment Variables Security](https://12factor.net/config)
-
-## 🆘 Support
-
-For security incidents or questions:
-- Create secure issue (no credentials in description)
-- Contact team security officer
-- Follow incident response procedures
-
----
-**Remember**: Security is everyone's responsibility. When in doubt, ask for help!
+- [Environment Variables Best Practices](https://12factor.net/config)

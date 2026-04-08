@@ -27,9 +27,19 @@ for /f "usebackq eol=# tokens=1* delims==" %%A in ("%~dp0..\config\.env") do (
     if not "%%A"=="" set "%%A=%%B"
 )
 
-if "%ACCOUNT1_LOGIN%"=="" (
+set "ACCOUNT1_AVAILABLE="
+set "ACCOUNT2_AVAILABLE="
+set "ACCOUNT3_AVAILABLE="
+set "ACCOUNT4_AVAILABLE="
+
+if not "%ACCOUNT1_LOGIN%"=="" set "ACCOUNT1_AVAILABLE=1"
+if not "%ACCOUNT2_LOGIN%"=="" set "ACCOUNT2_AVAILABLE=1"
+if not "%ACCOUNT3_LOGIN%"=="" set "ACCOUNT3_AVAILABLE=1"
+if not "%ACCOUNT4_LOGIN%"=="" set "ACCOUNT4_AVAILABLE=1"
+
+if not defined ACCOUNT1_AVAILABLE if not defined ACCOUNT2_AVAILABLE if not defined ACCOUNT3_AVAILABLE if not defined ACCOUNT4_AVAILABLE (
     echo ERROR: Configuration is empty or invalid.
-    echo Fill in config\.env with your Steam accounts.
+    echo Fill in config\.env with at least one Steam account.
     echo.
     pause
     exit /b 1
@@ -60,29 +70,31 @@ if "%GAME_CHOICE%"=="1" (
 :select_account
 echo.
 echo Select account:
-echo   1. %ACCOUNT1_LOGIN%
-echo   2. %ACCOUNT2_LOGIN%
-echo   3. %ACCOUNT3_LOGIN%
-echo   4. %ACCOUNT4_LOGIN%
+if defined ACCOUNT1_AVAILABLE echo   1. %ACCOUNT1_LOGIN%
+if defined ACCOUNT2_AVAILABLE echo   2. %ACCOUNT2_LOGIN%
+if defined ACCOUNT3_AVAILABLE echo   3. %ACCOUNT3_LOGIN%
+if defined ACCOUNT4_AVAILABLE echo   4. %ACCOUNT4_LOGIN%
 echo.
-set /p ACCOUNT_CHOICE="Enter account number (1-4): "
+set /p ACCOUNT_CHOICE="Enter account number: "
 
 if "%ACCOUNT_CHOICE%"=="1" (
+    if not defined ACCOUNT1_AVAILABLE goto :invalid_account_choice
     set "LOGIN=%ACCOUNT1_LOGIN%"
     set "PASSWORD=%ACCOUNT1_PASSWORD%"
 ) else if "%ACCOUNT_CHOICE%"=="2" (
+    if not defined ACCOUNT2_AVAILABLE goto :invalid_account_choice
     set "LOGIN=%ACCOUNT2_LOGIN%"
     set "PASSWORD=%ACCOUNT2_PASSWORD%"
 ) else if "%ACCOUNT_CHOICE%"=="3" (
+    if not defined ACCOUNT3_AVAILABLE goto :invalid_account_choice
     set "LOGIN=%ACCOUNT3_LOGIN%"
     set "PASSWORD=%ACCOUNT3_PASSWORD%"
 ) else if "%ACCOUNT_CHOICE%"=="4" (
+    if not defined ACCOUNT4_AVAILABLE goto :invalid_account_choice
     set "LOGIN=%ACCOUNT4_LOGIN%"
     set "PASSWORD=%ACCOUNT4_PASSWORD%"
 ) else (
-    echo Invalid selection.
-    pause
-    exit /b 1
+    goto :invalid_account_choice
 )
 
 if "%LOGIN%"=="" (
@@ -140,6 +152,11 @@ echo ====================================================================
 echo.
 pause
 exit /b 0
+
+:invalid_account_choice
+echo Invalid selection.
+pause
+exit /b 1
 
 :placeholder_error
 echo ERROR: Placeholder values detected in config\.env

@@ -1,0 +1,105 @@
+name: Release Utilities (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Mode: validate checks, dry-run preview, apply (blocked by policy)"
+        required: true
+        default: validate
+        type: choice
+        options:
+          - validate
+          - dry-run
+          - apply
+
+concurrency:
+  group: release-utilities-manual
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  release-manual-utils:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare workspace without JS actions
+        env:
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          SERVER: ${{ github.server_url }}
+        run: |
+          set -euo pipefail
+          git init repo
+          cd repo
+          git remote add origin "${SERVER}/${REPO}.git"
+          git fetch --depth=1 origin "${SHA}"
+          git checkout --detach FETCH_HEAD
+
+      - name: Validate release files
+        run: |
+          set -euo pipefail
+          cd repo
+          jq empty config/release-manifest.json
+
+          if [ ! -f CHANGELOG.md ]; then
+            echo "CHANGELOG.md is required"
+            exit 1
+          fi
+
+      - name: Validate version consistency
+        id: versions
+        run: |
+          set -euo pipefail
+          cd repo
+
+          MANIFEST_VERSION="$(jq -r '.version' config/release-manifest.json)"
+          CHANGELOG_VERSION="$(grep -E '^## \[[0-9]+\.[0-9]+\.[0-9]+\]' CHANGELOG.md | head -n 1 | sed -E 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*$/\1/')"
+
+          if [ -z "${MANIFEST_VERSION}" ] || [ "${MANIFEST_VERSION}" = "null" ]; then
+            echo "Manifest version is empty"
+            exit 1
+          fi
+
+          if [ -z "${CHANGELOG_VERSION}" ]; then
+            echo "Could not detect top changelog version"
+            exit 1
+          fi
+
+          echo "manifest=${MANIFEST_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "changelog=${CHANGELOG_VERSION}" >> "$GITHUB_OUTPUT"
+
+          if [ "${MANIFEST_VERSION}" != "${CHANGELOG_VERSION}" ]; then
+            echo "Version mismatch detected:"
+            echo "  config/release-manifest.json=${MANIFEST_VERSION}"
+            echo "  CHANGELOG.md=${CHANGELOG_VERSION}"
+            exit 1
+          fi
+
+      - name: Dry-run placeholder
+        if: ${{ github.event.inputs.mode == 'dry-run' }}
+        run: |
+          echo "Dry-run complete: release files and version checks passed."
+          echo "Would release tag: v${{ steps.versions.outputs.manifest }}"
+          echo "No release changes were applied."
+
+      - name: Apply mode blocked by policy
+        if: ${{ github.event.inputs.mode == 'apply' }}
+        run: |
+          echo "Apply mode is intentionally blocked in this repository policy."
+          echo "Use manual release flow: update manifest + changelog + tag push."
+          exit 1
+
+      - name: Workflow summary
+        if: always()
+        run: |
+          {
+            echo "## Release Utilities (Manual)"
+            echo ""
+            echo "- Mode: ${{ github.event.inputs.mode }}"
+            echo "- config/release-manifest.json: ${{ steps.versions.outputs.manifest }}"
+            echo "- CHANGELOG.md: ${{ steps.versions.outputs.changelog }}"
+            echo ""
+            echo "Result: validation utility workflow executed without automatic release actions."
+          } >> "$GITHUB_STEP_SUMMARY"
